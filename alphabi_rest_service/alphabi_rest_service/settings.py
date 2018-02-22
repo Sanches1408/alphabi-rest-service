@@ -84,8 +84,19 @@ DATABASES = {
         'PASSWORD': 'admin',
         'HOST': '127.0.0.1',
         'PORT': '5432',
+    },
+    'alphabi': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'alphabi',
+        'USER': 'root',
+        'PASSWORD': '',
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        }
     }
 }
+
+DATABASE_ROUTERS = ['alphabi_rest_service.routers.AlphaBIRouter']
 
 
 # Password validation
@@ -134,6 +145,8 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
     )
 }
