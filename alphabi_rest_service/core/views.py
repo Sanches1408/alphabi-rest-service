@@ -1,20 +1,35 @@
-from django.shortcuts import render
 from django.contrib.auth.models import User, Group
-from rest_framework import viewsets
-from core.serializers import UserSerializer, GroupSerializer
+from core.serializers import DataSerializer
+from rest_framework.generics import (
+    CreateAPIView,
+    ListAPIView,
+    RetrieveAPIView,
+    DestroyAPIView,
+    UpdateAPIView
+    )
+from core.models import Data
 
 
-class UserViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
-    queryset = User.objects.all().order_by('-date_joined')
-    serializer_class = UserSerializer
+class DataCreateAPIView(CreateAPIView):
+    queryset = Data.objects.all()
+    serializer_class = DataSerializer
 
 
-class GroupViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
+class DataListAPIView(ListAPIView):
+    queryset = Data.objects.all()
+    serializer_class = DataSerializer
+
+
+class DataDetailAPIView(RetrieveAPIView):
+    queryset = Data.objects.all()
+    serializer_class = DataSerializer
+
+
+class DataUpdateAPIView(UpdateAPIView):
+    queryset = Data.objects.all()
+    serializer_class = DataSerializer
+
+
+class DataDeleteAPIView(DestroyAPIView):
+    queryset = Data.objects.all()
+    serializer_class = DataSerializer
