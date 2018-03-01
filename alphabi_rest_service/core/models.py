@@ -10,5 +10,7 @@ class Data(models.Model):
     class Meta:
         db_table = 'data'
         permissions = (
-            ("view_data", "Can see data"),
+            ("title", "Can see title"),
+            ("measure", "Can see measure"),
+            ("value", "Can see value"),
         )

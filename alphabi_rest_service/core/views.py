@@ -1,38 +1,25 @@
-from django.contrib.auth.models import User, Group
-from core.serializers import DataSerializer
-from rest_framework.generics import (
-    CreateAPIView,
-    ListAPIView,
-    RetrieveAPIView,
-    DestroyAPIView,
-    UpdateAPIView,
-    )
-from core.permissions import IsAllowedData
-from core.models import Data
+from core.serializers import GeneralSerializer
+from core.permissions import GeneralPermission
+from rest_framework.viewsets import ModelViewSet
+from django.apps import apps
+from django.contrib.contenttypes.models import ContentType
 
 
-class DataCreateAPIView(CreateAPIView):
-    queryset = Data.objects.all()
-    serializer_class = DataSerializer
+class GeneralViewSet(ModelViewSet):
+    permission_classes = [GeneralPermission]
 
+    def dispatch(self, request, *args, **kwargs):
+        self.model = self.get_model()
+        return super(GeneralViewSet, self).dispatch(request, *args, **kwargs)
 
-class DataListAPIView(ListAPIView):
-    queryset = Data.objects.all()
-    serializer_class = DataSerializer
-    permission_classes = [IsAllowedData]
+    def get_model(self):
+        model_name = self.kwargs.get('model')
+        return apps.get_model(ContentType.objects.get(model=model_name).app_label,
+                              model_name)
 
-
-class DataDetailAPIView(RetrieveAPIView):
-    queryset = Data.objects.all()
-    serializer_class = DataSerializer
-    permission_classes = [IsAllowedData]
-
-
-class DataUpdateAPIView(UpdateAPIView):
-    queryset = Data.objects.all()
-    serializer_class = DataSerializer
-
-
-class DataDeleteAPIView(DestroyAPIView):
-    queryset = Data.objects.all()
-    serializer_class = DataSerializer
+    def get_queryset(self):
+        return self.model.objects.all()
+    
+    def get_serializer_class(self):
+        GeneralSerializer.Meta.model = self.model
+        return GeneralSerializer
