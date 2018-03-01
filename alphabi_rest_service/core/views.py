@@ -5,8 +5,9 @@ from rest_framework.generics import (
     ListAPIView,
     RetrieveAPIView,
     DestroyAPIView,
-    UpdateAPIView
+    UpdateAPIView,
     )
+from core.permissions import IsAllowedData
 from core.models import Data
 
 
@@ -18,11 +19,13 @@ class DataCreateAPIView(CreateAPIView):
 class DataListAPIView(ListAPIView):
     queryset = Data.objects.all()
     serializer_class = DataSerializer
+    permission_classes = [IsAllowedData]
 
 
 class DataDetailAPIView(RetrieveAPIView):
     queryset = Data.objects.all()
     serializer_class = DataSerializer
+    permission_classes = [IsAllowedData]
 
 
 class DataUpdateAPIView(UpdateAPIView):
